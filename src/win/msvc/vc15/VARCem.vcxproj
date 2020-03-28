@@ -65,6 +65,7 @@
     <ClCompile Include="..\..\..\devices\disk\hdd.c" />
     <ClCompile Include="..\..\..\devices\disk\hdd_image.c" />
     <ClCompile Include="..\..\..\devices\disk\hdd_table.c" />
+    <ClCompile Include="..\..\..\devices\disk\mo.c" />
     <ClCompile Include="..\..\..\devices\disk\zip.c" />
     <ClCompile Include="..\..\..\devices\misc\isamem.c" />
     <ClCompile Include="..\..\..\devices\misc\isartc.c" />
@@ -426,6 +427,7 @@
     <ClInclude Include="..\..\..\devices\disk\hdc.h" />
     <ClInclude Include="..\..\..\devices\disk\hdc_ide.h" />
     <ClInclude Include="..\..\..\devices\disk\hdd.h" />
+    <ClInclude Include="..\..\..\devices\disk\mo.h" />
     <ClInclude Include="..\..\..\devices\disk\zip.h" />
     <ClInclude Include="..\..\..\devices\misc\isamem.h" />
     <ClInclude Include="..\..\..\devices\misc\isartc.h" />

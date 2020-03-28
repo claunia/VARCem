@@ -54,6 +54,7 @@
     <ClCompile Include="..\..\..\devices\disk\hdd.c" />
     <ClCompile Include="..\..\..\devices\disk\hdd_image.c" />
     <ClCompile Include="..\..\..\devices\disk\hdd_table.c" />
+    <ClCompile Include="..\..\..\devices\disk\mo.c" />
     <ClCompile Include="..\..\..\devices\disk\zip.c" />
     <ClCompile Include="..\..\..\devices\network\slirp\bootp.c" />
     <ClCompile Include="..\..\..\devices\network\slirp\cksum.c" />
@@ -399,6 +400,7 @@
     <ClInclude Include="..\..\..\devices\disk\hdc.h" />
     <ClInclude Include="..\..\..\devices\disk\hdc_ide.h" />
     <ClInclude Include="..\..\..\devices\disk\hdd.h" />
+    <ClInclude Include="..\..\..\devices\disk\mo.h" />
     <ClInclude Include="..\..\..\devices\disk\zip.h" />
     <ClInclude Include="..\..\..\devices\network\slirp\bootp.h" />
     <ClInclude Include="..\..\..\devices\network\slirp\ctl.h" />

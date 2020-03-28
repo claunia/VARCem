@@ -164,6 +164,9 @@
     <ClCompile Include="..\..\..\devices\disk\hdd_table.c">
       <Filter>devices\disk</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\devices\disk\mo.c">
+      <Filter>devices\disk</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\..\devices\disk\zip.c">
       <Filter>devices\disk</Filter>
     </ClCompile>
@@ -1173,6 +1176,9 @@
       <Filter>devices\disk</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\devices\disk\hdd.h">
+      <Filter>devices\disk</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\devices\disk\mo.h">
       <Filter>devices\disk</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\devices\disk\zip.h">

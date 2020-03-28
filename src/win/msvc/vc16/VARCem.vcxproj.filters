@@ -934,6 +934,9 @@
     <ClCompile Include="..\..\..\devices\floppy\fdc_pii15xb.c">
       <Filter>devices\floppy</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\devices\disk\mo.c">
+      <Filter>devices\disk</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\config.h" />
@@ -1703,6 +1706,9 @@
     </ClInclude>
     <ClInclude Include="..\..\..\devices\floppy\fdc_pii15xb.h">
       <Filter>devices\floppy</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\devices\disk\mo.h">
+      <Filter>devices\disk</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
