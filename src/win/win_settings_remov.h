@@ -43,7 +43,9 @@
  ************************************************************************/
 
 /* GLobal variables needed for the Removable Devices dialog. */
-static int rd_ignore_change = 0;
+static int mmc_ignore_change = 0;
+static int iomega_ignore_change = 0;
+static int mo_ignore_change = 0;
 static int cdlv_current_sel;
 static int zdlv_current_sel;
 static int modlv_current_sel;
@@ -731,7 +733,7 @@ mmc_devices_proc(HWND hdlg, UINT message, WPARAM wParam, LPARAM lParam)
 
     switch (message) {
 	case WM_INITDIALOG:
-		rd_ignore_change = 1;
+		mmc_ignore_change = 1;
 
 		cdlv_current_sel = 0;
 		h = GetDlgItem(hdlg, IDC_LIST_CDROM_DRIVES);
@@ -745,8 +747,10 @@ mmc_devices_proc(HWND hdlg, UINT message, WPARAM wParam, LPARAM lParam)
 		SendMessage(h, CB_SETCURSEL, b, 0);
 		cdrom_recalc_location_controls(hdlg, 0);
 
-	case WM_NOTIFY:
-		if (rd_ignore_change)
+		mmc_ignore_change = 0;
+	        return TRUE;
+        case WM_NOTIFY:
+		if (mmc_ignore_change)
 			return FALSE;
 
 		if ((((LPNMHDR)lParam)->code == LVN_ITEMCHANGED) && (((LPNMHDR)lParam)->idFrom == IDC_LIST_CDROM_DRIVES)) {
@@ -756,29 +760,29 @@ mmc_devices_proc(HWND hdlg, UINT message, WPARAM wParam, LPARAM lParam)
 			if (cdlv_current_sel == old_sel)
 				return FALSE;
 			if (cdlv_current_sel == -1) {
-				rd_ignore_change = 1;
+				mmc_ignore_change = 1;
 				cdlv_current_sel = old_sel;
 				ListView_SetItemState(h, cdlv_current_sel, LVIS_FOCUSED | LVIS_SELECTED, 0x000F);
-				rd_ignore_change = 0;
+				mmc_ignore_change = 0;
 				return FALSE;
 			}
-			rd_ignore_change = 1;
+			mmc_ignore_change = 1;
 
 			h = GetDlgItem(hdlg, IDC_COMBO_CD_BUS);
 			b = temp_cdrom_drives[cdlv_current_sel].bus_type;
 			SendMessage(h, CB_SETCURSEL, b, 0);
 			cdrom_recalc_location_controls(hdlg, 0);
 		}
-		rd_ignore_change = 0;
+		mmc_ignore_change = 0;
 		break;
 
 	case WM_COMMAND:
 		switch (LOWORD(wParam)) {
 			case IDC_COMBO_CD_BUS:
-				if (rd_ignore_change)
+				if (mmc_ignore_change)
 					return FALSE;
 
-				rd_ignore_change = 1;
+				mmc_ignore_change = 1;
 				h = GetDlgItem(hdlg, IDC_COMBO_CD_BUS);
 				b = (int)SendMessage(h, CB_GETCURSEL, 0, 0);
 				if (b == temp_cdrom_drives[cdlv_current_sel].bus_type)
@@ -793,14 +797,14 @@ mmc_devices_proc(HWND hdlg, UINT message, WPARAM wParam, LPARAM lParam)
 				h = GetDlgItem(hdlg, IDC_LIST_CDROM_DRIVES);
 				cdrom_update_item(h, cdlv_current_sel);
 cdrom_bus_skip:
-				rd_ignore_change = 0;
+				mmc_ignore_change = 0;
 				return FALSE;
 
 			case IDC_COMBO_CD_ID:
-				if (rd_ignore_change)
+				if (mmc_ignore_change)
 					return FALSE;
 
-				rd_ignore_change = 1;
+				mmc_ignore_change = 1;
 				h = GetDlgItem(hdlg, IDC_COMBO_CD_ID);
 				cdrom_untrack(cdlv_current_sel);
 				b = (int)SendMessage(h, CB_GETCURSEL, 0, 0);
@@ -808,14 +812,14 @@ cdrom_bus_skip:
 				cdrom_track(cdlv_current_sel);
 				h = GetDlgItem(hdlg, IDC_LIST_CDROM_DRIVES);
 				cdrom_update_item(h, cdlv_current_sel);
-				rd_ignore_change = 0;
+				mmc_ignore_change = 0;
 				return FALSE;
 
 			case IDC_COMBO_CD_LUN:
-				if (rd_ignore_change)
+				if (mmc_ignore_change)
 					return FALSE;
 
-				rd_ignore_change = 1;
+				mmc_ignore_change = 1;
 				h = GetDlgItem(hdlg, IDC_COMBO_CD_LUN);
 				cdrom_untrack(cdlv_current_sel);
 				b = (int)SendMessage(h, CB_GETCURSEL, 0, 0);
@@ -823,14 +827,14 @@ cdrom_bus_skip:
 				cdrom_track(cdlv_current_sel);
 				h = GetDlgItem(hdlg, IDC_LIST_CDROM_DRIVES);
 				cdrom_update_item(h, cdlv_current_sel);
-				rd_ignore_change = 0;
+				mmc_ignore_change = 0;
 				return FALSE;
 
 			case IDC_COMBO_CD_CHANNEL_IDE:
-				if (rd_ignore_change)
+				if (mmc_ignore_change)
 					return FALSE;
 
-				rd_ignore_change = 1;
+				mmc_ignore_change = 1;
 				h = GetDlgItem(hdlg, IDC_COMBO_CD_CHANNEL_IDE);
 				cdrom_untrack(cdlv_current_sel);
 				b = (int)SendMessage(h, CB_GETCURSEL, 0, 0);
@@ -838,20 +842,20 @@ cdrom_bus_skip:
 				cdrom_track(cdlv_current_sel);
 				h = GetDlgItem(hdlg, IDC_LIST_CDROM_DRIVES);
 				cdrom_update_item(h, cdlv_current_sel);
-				rd_ignore_change = 0;
+				mmc_ignore_change = 0;
 				return FALSE;
 
 			case IDC_COMBO_CD_SPEED:
-				if (rd_ignore_change)
+				if (mmc_ignore_change)
 					return FALSE;
 
-				rd_ignore_change = 1;
+				mmc_ignore_change = 1;
 				h = GetDlgItem(hdlg, IDC_COMBO_CD_SPEED);
 				b = (int)SendMessage(h, CB_GETCURSEL, 0, 0);
 				temp_cdrom_drives[cdlv_current_sel].speed_idx = (uint8_t)b;
 				h = GetDlgItem(hdlg, IDC_LIST_CDROM_DRIVES);
 				cdrom_update_item(h, cdlv_current_sel);
-				rd_ignore_change = 0;
+				mmc_ignore_change = 0;
 				return FALSE;
 
 		}
@@ -874,7 +878,7 @@ iomega_devices_proc(HWND hdlg, UINT message, WPARAM wParam, LPARAM lParam)
 
     switch (message) {
     case WM_INITDIALOG:
-	rd_ignore_change = 1;
+	iomega_ignore_change = 1;
 
 	zdlv_current_sel = 0;
 	h = GetDlgItem(hdlg, IDC_LIST_ZIP_DRIVES);
@@ -889,11 +893,11 @@ iomega_devices_proc(HWND hdlg, UINT message, WPARAM wParam, LPARAM lParam)
 	h = GetDlgItem(hdlg, IDC_CHECK250);
 	SendMessage(h, BM_SETCHECK,
 	    temp_zip_drives[zdlv_current_sel].is_250, 0);
-	rd_ignore_change = 0;
+	iomega_ignore_change = 0;
 	return TRUE;
 
     case WM_NOTIFY:
-	if (rd_ignore_change)
+	if (iomega_ignore_change)
 	    return FALSE;
 
 	if ((((LPNMHDR)lParam)->code == LVN_ITEMCHANGED) && (((LPNMHDR)lParam)->idFrom == IDC_LIST_ZIP_DRIVES)) {
@@ -904,13 +908,13 @@ iomega_devices_proc(HWND hdlg, UINT message, WPARAM wParam, LPARAM lParam)
 		return FALSE;
 
 	    if (zdlv_current_sel == -1) {
-		rd_ignore_change = 1;
+		iomega_ignore_change = 1;
 		zdlv_current_sel = old_sel;
 		ListView_SetItemState(h, zdlv_current_sel, LVIS_FOCUSED | LVIS_SELECTED, 0x000F);
-		rd_ignore_change = 0;
+		iomega_ignore_change = 0;
 		return FALSE;
 	    }
-	    rd_ignore_change = 1;
+	    iomega_ignore_change = 1;
 
 	    h = GetDlgItem(hdlg, IDC_COMBO_ZIP_BUS);
 	    b = temp_zip_drives[zdlv_current_sel].bus_type;
@@ -920,16 +924,16 @@ iomega_devices_proc(HWND hdlg, UINT message, WPARAM wParam, LPARAM lParam)
 	    SendMessage(h, BM_SETCHECK,
 		temp_zip_drives[zdlv_current_sel].is_250, 0);
 	}
-	rd_ignore_change = 0;
+	iomega_ignore_change = 0;
 	break;
 
     case WM_COMMAND:
 	switch (LOWORD(wParam)) {
 	case IDC_COMBO_ZIP_BUS:
-	    if (rd_ignore_change)
+	    if (iomega_ignore_change)
 		return FALSE;
 
-	    rd_ignore_change = 1;
+	    iomega_ignore_change = 1;
 	    h = GetDlgItem(hdlg, IDC_COMBO_ZIP_BUS);
 	    b = (int)SendMessage(h, CB_GETCURSEL, 0, 0);
 	    if (temp_zip_drives[zdlv_current_sel].bus_type == b)
@@ -942,14 +946,14 @@ iomega_devices_proc(HWND hdlg, UINT message, WPARAM wParam, LPARAM lParam)
 	    h = GetDlgItem(hdlg, IDC_LIST_ZIP_DRIVES);
 	    zip_update_item(h, zdlv_current_sel);
 	zip_bus_skip:
-	    rd_ignore_change = 0;
+	    iomega_ignore_change = 0;
 	    return FALSE;
 
 	case IDC_COMBO_ZIP_ID:
-	    if (rd_ignore_change)
+	    if (iomega_ignore_change)
 		return FALSE;
 
-	    rd_ignore_change = 1;
+	    iomega_ignore_change = 1;
 	    h = GetDlgItem(hdlg, IDC_COMBO_ZIP_ID);
 	    zip_untrack(zdlv_current_sel);
 	    b = (int)SendMessage(h, CB_GETCURSEL, 0, 0);
@@ -957,14 +961,14 @@ iomega_devices_proc(HWND hdlg, UINT message, WPARAM wParam, LPARAM lParam)
 	    zip_track(zdlv_current_sel);
 	    h = GetDlgItem(hdlg, IDC_LIST_ZIP_DRIVES);
 	    zip_update_item(h, zdlv_current_sel);
-	    rd_ignore_change = 0;
+	    iomega_ignore_change = 0;
 	    return FALSE;
 
 	case IDC_COMBO_ZIP_LUN:
-	    if (rd_ignore_change)
+	    if (iomega_ignore_change)
 		return FALSE;
 
-	    rd_ignore_change = 1;
+	    iomega_ignore_change = 1;
 	    h = GetDlgItem(hdlg, IDC_COMBO_ZIP_LUN);
 	    zip_untrack(zdlv_current_sel);
 	    b = (int)SendMessage(h, CB_GETCURSEL, 0, 0);
@@ -972,14 +976,14 @@ iomega_devices_proc(HWND hdlg, UINT message, WPARAM wParam, LPARAM lParam)
 	    zip_track(zdlv_current_sel);
 	    h = GetDlgItem(hdlg, IDC_LIST_ZIP_DRIVES);
 	    zip_update_item(h, zdlv_current_sel);
-	    rd_ignore_change = 0;
+	    iomega_ignore_change = 0;
 	    return FALSE;
 
 	case IDC_COMBO_ZIP_CHANNEL_IDE:
-	    if (rd_ignore_change)
+	    if (iomega_ignore_change)
 		return FALSE;
 
-	    rd_ignore_change = 1;
+	    iomega_ignore_change = 1;
 	    h = GetDlgItem(hdlg, IDC_COMBO_ZIP_CHANNEL_IDE);
 	    zip_untrack(zdlv_current_sel);
 	    b = (int)SendMessage(h, CB_GETCURSEL, 0, 0);
@@ -987,20 +991,20 @@ iomega_devices_proc(HWND hdlg, UINT message, WPARAM wParam, LPARAM lParam)
 	    zip_track(zdlv_current_sel);
 	    h = GetDlgItem(hdlg, IDC_LIST_ZIP_DRIVES);
 	    zip_update_item(h, zdlv_current_sel);
-	    rd_ignore_change = 0;
+	    iomega_ignore_change = 0;
 	    return FALSE;
 
 	case IDC_CHECK250:
-	    if (rd_ignore_change)
+	    if (iomega_ignore_change)
 		return FALSE;
 
-	    rd_ignore_change = 1;
+	    iomega_ignore_change = 1;
 	    h = GetDlgItem(hdlg, IDC_CHECK250);
 	    b = (int)SendMessage(h, BM_GETCHECK, 0, 0);
 	    temp_zip_drives[zdlv_current_sel].is_250 = (int8_t)b;
 	    h = GetDlgItem(hdlg, IDC_LIST_ZIP_DRIVES);
 	    zip_update_item(h, zdlv_current_sel);
-	    rd_ignore_change = 0;
+	    iomega_ignore_change = 0;
 	    return FALSE;
 	}
 	return FALSE;
@@ -1305,7 +1309,7 @@ mo_devices_proc(HWND hdlg, UINT message, WPARAM wParam, LPARAM lParam)
 
     switch (message) {
     case WM_INITDIALOG:
-	rd_ignore_change = 1;
+	mo_ignore_change = 1;
 
 	zdlv_current_sel = 0;
 	h = GetDlgItem(hdlg, IDC_LIST_MO_DRIVES);
@@ -1317,11 +1321,11 @@ mo_devices_proc(HWND hdlg, UINT message, WPARAM wParam, LPARAM lParam)
 	b = temp_mo_drives[modlv_current_sel].bus_type;
 	SendMessage(h, CB_SETCURSEL, b, 0);
 	mo_recalc_location_controls(hdlg, 0);
-	rd_ignore_change = 0;
+	mo_ignore_change = 0;
 	return TRUE;
 
     case WM_NOTIFY:
-	if (rd_ignore_change)
+	if (mo_ignore_change)
 	    return FALSE;
 
 	if ((((LPNMHDR)lParam)->code == LVN_ITEMCHANGED) && (((LPNMHDR)lParam)->idFrom == IDC_LIST_MO_DRIVES)) {
@@ -1332,29 +1336,29 @@ mo_devices_proc(HWND hdlg, UINT message, WPARAM wParam, LPARAM lParam)
 		return FALSE;
 
 	    if (modlv_current_sel == -1) {
-		rd_ignore_change = 1;
+		mo_ignore_change = 1;
 		modlv_current_sel = old_sel;
 		ListView_SetItemState(h, modlv_current_sel, LVIS_FOCUSED | LVIS_SELECTED, 0x000F);
-		rd_ignore_change = 0;
+		mo_ignore_change = 0;
 		return FALSE;
 	    }
-	    rd_ignore_change = 1;
+	    mo_ignore_change = 1;
 
 	    h = GetDlgItem(hdlg, IDC_COMBO_MO_BUS);
 	    b = temp_mo_drives[modlv_current_sel].bus_type;
 	    SendMessage(h, CB_SETCURSEL, b, 0);
 	    mo_recalc_location_controls(hdlg, 0);
 	}
-	rd_ignore_change = 0;
+	mo_ignore_change = 0;
 	break;
 
     case WM_COMMAND:
 	switch (LOWORD(wParam)) {
 	case IDC_COMBO_MO_BUS:
-	    if (rd_ignore_change)
+	    if (mo_ignore_change)
 		return FALSE;
 
-	    rd_ignore_change = 1;
+	    mo_ignore_change = 1;
 	    h = GetDlgItem(hdlg, IDC_COMBO_MO_BUS);
 	    b = (int)SendMessage(h, CB_GETCURSEL, 0, 0);
 	    if (temp_mo_drives[modlv_current_sel].bus_type == b)
@@ -1367,14 +1371,14 @@ mo_devices_proc(HWND hdlg, UINT message, WPARAM wParam, LPARAM lParam)
 	    h = GetDlgItem(hdlg, IDC_LIST_MO_DRIVES);
 	    mo_update_item(h, modlv_current_sel);
 	mo_bus_skip:
-	    rd_ignore_change = 0;
+	    mo_ignore_change = 0;
 	    return FALSE;
 
 	case IDC_COMBO_MO_ID:
-	    if (rd_ignore_change)
+	    if (mo_ignore_change)
 		return FALSE;
 
-	    rd_ignore_change = 1;
+	    mo_ignore_change = 1;
 	    h = GetDlgItem(hdlg, IDC_COMBO_MO_ID);
 	    zip_untrack(zdlv_current_sel);
 	    b = (int)SendMessage(h, CB_GETCURSEL, 0, 0);
@@ -1382,14 +1386,14 @@ mo_devices_proc(HWND hdlg, UINT message, WPARAM wParam, LPARAM lParam)
 	    mo_track(modlv_current_sel);
 	    h = GetDlgItem(hdlg, IDC_LIST_MO_DRIVES);
 	    mo_update_item(h, modlv_current_sel);
-	    rd_ignore_change = 0;
+	    mo_ignore_change = 0;
 	    return FALSE;
 
 	case IDC_COMBO_MO_LUN:
-	    if (rd_ignore_change)
+	    if (mo_ignore_change)
 		return FALSE;
 
-	    rd_ignore_change = 1;
+	    mo_ignore_change = 1;
 	    h = GetDlgItem(hdlg, IDC_COMBO_MO_LUN);
 	    mo_untrack(modlv_current_sel);
 	    b = (int)SendMessage(h, CB_GETCURSEL, 0, 0);
@@ -1397,14 +1401,14 @@ mo_devices_proc(HWND hdlg, UINT message, WPARAM wParam, LPARAM lParam)
 	    mo_track(modlv_current_sel);
 	    h = GetDlgItem(hdlg, IDC_LIST_MO_DRIVES);
 	    mo_update_item(h, modlv_current_sel);
-	    rd_ignore_change = 0;
+	    mo_ignore_change = 0;
 	    return FALSE;
 
 	case IDC_COMBO_ZIP_CHANNEL_IDE:
-	    if (rd_ignore_change)
+	    if (mo_ignore_change)
 		return FALSE;
 
-	    rd_ignore_change = 1;
+	    mo_ignore_change = 1;
 	    h = GetDlgItem(hdlg, IDC_COMBO_MO_CHANNEL_IDE);
 	    mo_untrack(modlv_current_sel);
 	    b = (int)SendMessage(h, CB_GETCURSEL, 0, 0);
@@ -1412,7 +1416,7 @@ mo_devices_proc(HWND hdlg, UINT message, WPARAM wParam, LPARAM lParam)
 	    mo_track(modlv_current_sel);
 	    h = GetDlgItem(hdlg, IDC_LIST_MO_DRIVES);
 	    mo_update_item(h, modlv_current_sel);
-	    rd_ignore_change = 0;
+	    mo_ignore_change = 0;
 	    return FALSE;
 	}
 	return FALSE;
