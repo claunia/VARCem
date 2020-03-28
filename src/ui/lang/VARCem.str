@@ -295,6 +295,7 @@
 #define  STR_3580	"ATAPI"
 #define  STR_3581	"SCSI"
 #define  STR_3582	"USB"
+#define  STR_3583	"Magneto-optical drives:"
 
 
 /* UI: Status Bar (3900.) */

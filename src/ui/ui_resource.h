@@ -249,6 +249,7 @@
 #define ICON_FLOPPY_D		248	/* "floppy_disabled.ico" */
 #define ICON_CDROM_D		249	/* "cdrom_disabled.ico" */
 #define ICON_ZIP_D		250	/* "zip_disabled.ico" */
+#define ICON_MO_D		255	/* "mo_disabled.ico" */
 
 
 /* String IDs. */
