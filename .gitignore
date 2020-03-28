@@ -35,3 +35,6 @@ src/*.o
 src/*.exe
 src/*.res
 src/*.map
+codealike.json
+# cmake files
+cmake-build-*
