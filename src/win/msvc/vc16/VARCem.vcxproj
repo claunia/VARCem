@@ -608,6 +608,9 @@
     <ClInclude Include="..\..\win_settings_video.h" />
   </ItemGroup>
   <ItemGroup>
+    <ResourceCompile Include="..\..\VARCem-common.rc">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </ResourceCompile>
     <ResourceCompile Include="..\..\VARCem.rc">
       <ShowProgress Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ShowProgress>
       <ShowProgress Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ShowProgress>
@@ -635,6 +638,39 @@
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">cl -nologo -EP %(FullPath) &gt; $(SolutionDir)..\..\%(Outputs)</Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">cl -nologo -EP %(FullPath) &gt; $(SolutionDir)..\..\%(Outputs)</Command>
     </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="..\..\..\ui\lang\Extra-BY.txt" />
+    <Text Include="..\..\..\ui\lang\Extra-KZ.txt" />
+    <Text Include="..\..\..\ui\lang\Extra-LT.txt" />
+    <Text Include="..\..\..\ui\lang\Extra-NO.txt" />
+    <Text Include="..\..\..\ui\lang\Extra-PL.txt" />
+    <Text Include="..\..\..\ui\lang\Extra-PT.txt" />
+    <Text Include="..\..\..\ui\lang\Extra.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\..\ui\lang\VARCem-BY.str" />
+    <None Include="..\..\..\ui\lang\VARCem-CZ.str" />
+    <None Include="..\..\..\ui\lang\VARCem-DE.str" />
+    <None Include="..\..\..\ui\lang\VARCem-DK.str" />
+    <None Include="..\..\..\ui\lang\VARCem-DU.str" />
+    <None Include="..\..\..\ui\lang\VARCem-ES.str" />
+    <None Include="..\..\..\ui\lang\VARCem-FI.str" />
+    <None Include="..\..\..\ui\lang\VARCem-FR.str" />
+    <None Include="..\..\..\ui\lang\VARCem-IT.str" />
+    <None Include="..\..\..\ui\lang\VARCem-JP.str" />
+    <None Include="..\..\..\ui\lang\VARCem-KR.str" />
+    <None Include="..\..\..\ui\lang\VARCem-KZ.str" />
+    <None Include="..\..\..\ui\lang\VARCem-LT.str" />
+    <None Include="..\..\..\ui\lang\VARCem-NO.str" />
+    <None Include="..\..\..\ui\lang\VARCem-PL.str" />
+    <None Include="..\..\..\ui\lang\VARCem-PT.str" />
+    <None Include="..\..\..\ui\lang\VARCem-RU.str" />
+    <None Include="..\..\..\ui\lang\VARCem-SL.str" />
+    <None Include="..\..\..\ui\lang\VARCem-UA.str" />
+    <None Include="..\..\..\ui\lang\VARCem.def" />
+    <None Include="..\..\..\ui\lang\VARCem.lang" />
+    <None Include="..\..\..\ui\lang\VARCem.str" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>

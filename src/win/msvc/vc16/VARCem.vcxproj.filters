@@ -1787,9 +1787,15 @@
     <Filter Include="devices\chipsets">
       <UniqueIdentifier>{552b793b-68ef-4307-a736-304825db0e67}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ui\lang">
+      <UniqueIdentifier>{4f08d059-cf31-4909-83e5-bc3133fd1c35}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="..\..\VARCem.rc">
+      <Filter>win</Filter>
+    </ResourceCompile>
+    <ResourceCompile Include="..\..\VARCem-common.rc">
       <Filter>win</Filter>
     </ResourceCompile>
   </ItemGroup>
@@ -1797,5 +1803,96 @@
     <CustomBuild Include="..\..\VARCem.mpp">
       <Filter>win</Filter>
     </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="..\..\..\ui\lang\Extra.txt">
+      <Filter>ui\lang</Filter>
+    </Text>
+    <Text Include="..\..\..\ui\lang\Extra-BY.txt">
+      <Filter>ui\lang</Filter>
+    </Text>
+    <Text Include="..\..\..\ui\lang\Extra-KZ.txt">
+      <Filter>ui\lang</Filter>
+    </Text>
+    <Text Include="..\..\..\ui\lang\Extra-LT.txt">
+      <Filter>ui\lang</Filter>
+    </Text>
+    <Text Include="..\..\..\ui\lang\Extra-NO.txt">
+      <Filter>ui\lang</Filter>
+    </Text>
+    <Text Include="..\..\..\ui\lang\Extra-PL.txt">
+      <Filter>ui\lang</Filter>
+    </Text>
+    <Text Include="..\..\..\ui\lang\Extra-PT.txt">
+      <Filter>ui\lang</Filter>
+    </Text>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\..\ui\lang\VARCem.def">
+      <Filter>ui\lang</Filter>
+    </None>
+    <None Include="..\..\..\ui\lang\VARCem.lang">
+      <Filter>ui\lang</Filter>
+    </None>
+    <None Include="..\..\..\ui\lang\VARCem.str">
+      <Filter>ui\lang</Filter>
+    </None>
+    <None Include="..\..\..\ui\lang\VARCem-BY.str">
+      <Filter>ui\lang</Filter>
+    </None>
+    <None Include="..\..\..\ui\lang\VARCem-CZ.str">
+      <Filter>ui\lang</Filter>
+    </None>
+    <None Include="..\..\..\ui\lang\VARCem-DE.str">
+      <Filter>ui\lang</Filter>
+    </None>
+    <None Include="..\..\..\ui\lang\VARCem-DK.str">
+      <Filter>ui\lang</Filter>
+    </None>
+    <None Include="..\..\..\ui\lang\VARCem-DU.str">
+      <Filter>ui\lang</Filter>
+    </None>
+    <None Include="..\..\..\ui\lang\VARCem-ES.str">
+      <Filter>ui\lang</Filter>
+    </None>
+    <None Include="..\..\..\ui\lang\VARCem-FI.str">
+      <Filter>ui\lang</Filter>
+    </None>
+    <None Include="..\..\..\ui\lang\VARCem-FR.str">
+      <Filter>ui\lang</Filter>
+    </None>
+    <None Include="..\..\..\ui\lang\VARCem-IT.str">
+      <Filter>ui\lang</Filter>
+    </None>
+    <None Include="..\..\..\ui\lang\VARCem-JP.str">
+      <Filter>ui\lang</Filter>
+    </None>
+    <None Include="..\..\..\ui\lang\VARCem-KR.str">
+      <Filter>ui\lang</Filter>
+    </None>
+    <None Include="..\..\..\ui\lang\VARCem-KZ.str">
+      <Filter>ui\lang</Filter>
+    </None>
+    <None Include="..\..\..\ui\lang\VARCem-LT.str">
+      <Filter>ui\lang</Filter>
+    </None>
+    <None Include="..\..\..\ui\lang\VARCem-NO.str">
+      <Filter>ui\lang</Filter>
+    </None>
+    <None Include="..\..\..\ui\lang\VARCem-PL.str">
+      <Filter>ui\lang</Filter>
+    </None>
+    <None Include="..\..\..\ui\lang\VARCem-PT.str">
+      <Filter>ui\lang</Filter>
+    </None>
+    <None Include="..\..\..\ui\lang\VARCem-RU.str">
+      <Filter>ui\lang</Filter>
+    </None>
+    <None Include="..\..\..\ui\lang\VARCem-SL.str">
+      <Filter>ui\lang</Filter>
+    </None>
+    <None Include="..\..\..\ui\lang\VARCem-UA.str">
+      <Filter>ui\lang</Filter>
+    </None>
   </ItemGroup>
 </Project>
