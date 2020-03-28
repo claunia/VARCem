@@ -382,7 +382,9 @@
 #define  IDS_3316	3316		/* "Other peripherals" */
 #define  IDS_3317	3317		/* "Hard disks" */
 #define  IDS_3318	3318		/* "Floppy drives" */
-#define  IDS_3319	3319		/* "Other removable devices" */
+#define  IDS_3319	3319		/* "CD/DVD devices" */
+#define  IDS_3320	3320		/* "IOMEGA devices" */
+#define  IDS_3321	3321		/* "Magneto-optical devices" */
 
 /* UI dialog: Settings (Machine, 3325.) */
 #define  IDS_3325	3325		/* "Machine:" */
