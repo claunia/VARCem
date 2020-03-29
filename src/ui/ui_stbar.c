@@ -54,6 +54,7 @@
 #include "../devices/disk/zip.h"
 #include "../devices/cdrom/cdrom.h"
 #include "../devices/cdrom/cdrom_image.h"
+#include "../devices/disk/mo.h"
 #include "../devices/network/network.h"
 #include "../devices/sound/sound.h"
 #include "../devices/video/video.h"
@@ -206,7 +207,8 @@ ui_sb_tip_update(uint8_t tag)
     wchar_t tip[512];
     wchar_t temp[512];
     cdrom_t *cdev;
-    zip_drive_t *zdev;
+    zip_drive_t* zdev;
+    mo_drive_t* modev;
     const wchar_t *str;
     const char *stransi;
     sbpart_t *ptr;
@@ -271,6 +273,21 @@ ui_sb_tip_update(uint8_t tag)
 		swprintf(tip, sizeof_w(tip), get_string(IDS_3950),
 			 type, drive+1, temp, str);
 		if (zdev->ui_writeprot)
+			wcscat(tip, get_string(IDS_3902));	/*"[WP]"*/
+		break;
+
+	case SB_MO:
+		drive = ptr->tag & 0x0f;
+		modev = &mo_drives[drive];
+		bus = modev->bus_type;
+		id = IDS_3580 + (bus - 1);
+		wcscpy(temp, get_string(id));
+		str = modev->image_path;
+		if (*str == L'\0')
+			str = get_string(IDS_3900);		/*"(empty)"*/
+		swprintf(tip, sizeof_w(tip), get_string(IDS_3980),
+			 drive+1, temp, str);
+		if (modev->ui_writeprot)
 			wcscat(tip, get_string(IDS_3902));	/*"[WP]"*/
 		break;
 
@@ -461,6 +478,25 @@ menu_zip(int part, int drive)
     }
 }
 
+/* Create the "MO drive" menu. */
+static void
+menu_mo(int part, int drive)
+{
+    sb_menu_add_item(part, IDM_MO_IMAGE_NEW | drive, get_string(IDS_3904));
+    sb_menu_add_item(part, IDM_MO_IMAGE_EXIST | drive, get_string(IDS_3905));
+    sb_menu_add_item(part, IDM_MO_RELOAD | drive, get_string(IDS_3906));
+    sb_menu_add_item(part, -1, NULL);
+    sb_menu_add_item(part, IDM_MO_EJECT | drive, get_string(IDS_3907));
+
+    if (mo_drives[drive].image_path[0] == L'\0') {
+	sb_menu_enable_item(part, IDM_MO_EJECT | drive, 0);
+	sb_menu_enable_item(part, IDM_MO_RELOAD | drive, 1);
+    }
+    else {
+	sb_menu_enable_item(part, IDM_MO_EJECT | drive, 1);
+	sb_menu_enable_item(part, IDM_MO_RELOAD | drive, 0);
+    }
+}
 
 /* Initialize or update the entire status bar. */
 void
@@ -542,8 +578,22 @@ ui_sb_reset(void)
 	if ((zip_drives[drive].bus_type == ZIP_BUS_SCSI) && (config.scsi_card == 0))
 		continue;
 
-	if (zip_drives[drive].bus_type != CDROM_BUS_DISABLED)
+	if (zip_drives[drive].bus_type != ZIP_BUS_DISABLED)
 		sb_nparts++;
+    }
+
+    for (drive = 0; drive < MO_NUM; drive++) {
+	/* Could be Internal or External IDE.. */
+	if ((mo_drives[drive].bus_type == MO_BUS_ATAPI) &&
+	    !(hdint || !strcmp(hdc, "ide"))) {
+	    continue;
+	}
+
+	if ((mo_drives[drive].bus_type == MO_BUS_SCSI) && (config.scsi_card == 0))
+	    continue;
+
+	if (mo_drives[drive].bus_type != MO_BUS_DISABLED)
+	    sb_nparts++;
     }
 
     if (do_net)
@@ -635,6 +685,23 @@ ui_sb_reset(void)
 	}
     }
 
+    for (drive = 0; drive < MO_NUM; drive++) {
+	/* Could be Internal or External IDE.. */
+	if ((mo_drives[drive].bus_type == MO_BUS_ATAPI) &&
+	    !(hdint || !strcmp(hdc, "ide"))) {
+	    continue;
+	}
+
+	if ((mo_drives[drive].bus_type == MO_BUS_SCSI) && (config.scsi_card == 0))
+	    continue;
+
+	if (mo_drives[drive].bus_type != 0) {
+	    ptr = &sb_parts[sb_nparts++];
+	    ptr->width = SB_ICON_WIDTH;
+	    ptr->tag = SB_MO | drive;
+	}
+    }
+
     if (do_net) {
 	ptr = &sb_parts[sb_nparts++];
 	ptr->width = SB_ICON_WIDTH;
@@ -720,6 +787,15 @@ ui_sb_reset(void)
 			ptr->icon = (uint8_t)(ICON_ZIP + ptr->flags);
 			sb_menu_create(part);
 			menu_zip(part, drive);
+			ui_sb_tip_update(ptr->tag);
+			break;
+
+		case SB_MO:		/* Magneto-optical */
+			drive = ptr->tag & 0x0f;
+			ptr->flags = (wcslen(mo_drives[drive].image_path) == 0) ? ICON_EMPTY : 0;
+			ptr->icon = (uint8_t)(ICON_MO + ptr->flags);
+			sb_menu_create(part);
+			menu_mo(part, drive);
 			ui_sb_tip_update(ptr->tag);
 			break;
 
@@ -998,6 +1074,37 @@ ui_sb_menu_command(int idm, uint8_t tag)
 	case IDM_ZIP_RELOAD:
 		drive = tag & 0x03;
 		ui_zip_reload(drive);
+		break;
+
+	case IDM_MO_IMAGE_NEW:
+		drive = tag & 0x03;
+		part = find_tag(SB_MO | drive);
+		if (part == -1) break;
+
+		dlg_new_image(drive, part, 0);
+		break;
+
+	case IDM_MO_IMAGE_EXIST:
+		drive = tag & 0x03;
+		part = find_tag(SB_MO | drive);
+		if (part == -1) break;
+
+		str = mo_drives[drive].image_path;
+		i = dlg_file(get_string(IDS_3981), str, temp, DLG_FILE_LOAD);
+		if (i) {
+			ui_mo_mount(drive, part,
+				     !!(i & DLG_FILE_RO), temp);
+		}
+		break;
+
+	case IDM_MO_EJECT:
+		drive = tag & 0x03;
+		ui_mo_eject(drive);
+		break;
+
+	case IDM_MO_RELOAD:
+		drive = tag & 0x03;
+		ui_mo_reload(drive);
 		break;
 
 	case IDM_DISK_NOTIFY:

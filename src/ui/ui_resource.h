@@ -521,6 +521,9 @@
 #define  IDS_3952	3952		/* "ZIP images (*.im?)\0*.im..." */
 #define IDS_3960	3960		/* "Network (%s) */
 #define IDS_3970	3970		/* "Sound (%s) */
+#define IDS_3980	3980		/* "MO %i (%ls): %ls" */
+#define  IDS_3981	3981		/* "MO images (*.im?)\0*.im..." */
+#define  IDS_3982	3982		/* "MO images (*.im?)\0*.im..." */
 
 
 /* UI menu: Action (4000.) */
