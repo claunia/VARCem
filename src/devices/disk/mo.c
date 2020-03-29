@@ -56,10 +56,9 @@
 #include "../disk/hdc_ide.h"
 #include "mo.h"
 
-#include <corecrt_io.h>
-
 #ifdef _WIN32
 #include <windows.h>
+#include <io.h>
 #else
 #include <unistd.h>
 #endif
