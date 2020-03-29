@@ -954,6 +954,7 @@ pc_reset_hard_init(void)
     scsi_card_init();
 
     cdrom_hard_reset();
+    zip_hard_reset();
     mo_hard_reset();
     scsi_disk_hard_reset();
 
@@ -1041,6 +1042,7 @@ pc_reload(const wchar_t *fn)
 
     cdrom_hard_reset();
 
+    zip_hard_reset();
     mo_hard_reset();
 
     scsi_disk_hard_reset();
