@@ -865,7 +865,7 @@ ui_sb_menu_command(int idm, uint8_t tag)
 		part = find_tag(SB_FLOPPY | drive);
 		if (part == -1) break;
 
-		dlg_new_image(drive, part, 0);
+		dlg_new_image(drive, part, 0, 0);
 		break;
 
 	case IDM_FLOPPY_IMAGE_EXIST:
@@ -1050,7 +1050,7 @@ ui_sb_menu_command(int idm, uint8_t tag)
 		part = find_tag(SB_ZIP | drive);
 		if (part == -1) break;
 
-		dlg_new_image(drive, part, 1);
+		dlg_new_image(drive, part, 1, 0);
 		break;
 
 	case IDM_ZIP_IMAGE_EXIST:
@@ -1081,7 +1081,7 @@ ui_sb_menu_command(int idm, uint8_t tag)
 		part = find_tag(SB_MO | drive);
 		if (part == -1) break;
 
-		dlg_new_image(drive, part, 0);
+		dlg_new_image(drive, part, 0, 1);
 		break;
 
 	case IDM_MO_IMAGE_EXIST:
@@ -1119,7 +1119,7 @@ ui_sb_menu_command(int idm, uint8_t tag)
 		part = find_tag(SB_DISK | drive);
 		if (part == -1) break;
 
-		dlg_new_image(drive, part, 1);
+		dlg_new_image(drive, part, 1, 0);
 		break;
 
 	case IDM_DISK_IMAGE_EXIST:
