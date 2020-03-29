@@ -133,6 +133,9 @@ settings_msgbox(int type, void *arg)
 #include "win_settings_floppy.h"		/* Floppy dialog */
 #include "win_settings_disk.h"			/* (Hard) Disk dialog */
 #include "win_settings_remov.h"			/* Removable Devices dialog */
+#include "win_settings_mmc.h"			/* Removable Devices dialog */
+#include "win_settings_iomega.h"			/* Removable Devices dialog */
+#include "win_settings_mo.h"			/* Removable Devices dialog */
 
 
 /* This does the initial read of global variables into the temporary ones. */
